@@ -12,14 +12,21 @@ hoveredCells = array_create(7);
 acceptableCells = array_create(7, false);
 
 ///
+
+// Reaction types
+// 7 of 1
+// 3.5 of 2
+// 2.33 of 3
+// 1.75 of 4
+// 1 of 7
 reactionGrabBagElementCount = array_create(0);
 
 grabBagModulator = array_create(ELEMENT_COUNT.NUMBER);
-grabBagModulator[ELEMENT_COUNT.ONE] = 7/1;
-grabBagModulator[ELEMENT_COUNT.TWO] = 7/2;
-grabBagModulator[ELEMENT_COUNT.THREE] = 7/3;
-grabBagModulator[ELEMENT_COUNT.FOUR] = 7/4;
-grabBagModulator[ELEMENT_COUNT.SEVEN] = 7/7;
+grabBagModulator[ELEMENT_COUNT.ONE] = 7;
+grabBagModulator[ELEMENT_COUNT.TWO] = 4;
+grabBagModulator[ELEMENT_COUNT.THREE] = 3;
+grabBagModulator[ELEMENT_COUNT.FOUR] = 1;
+grabBagModulator[ELEMENT_COUNT.SEVEN] = 1;
 
 for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
 	while grabBagModulator[i] >= 1{
@@ -30,6 +37,7 @@ for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
 for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
 	grabBagModulator[i] += 7/global.ELEMENT_COUNT_INT[i];
 }
+array_shuffle_ext(reactionGrabBagElementCount);
 
 reactionGrabBagIndex = 0;
 
@@ -81,8 +89,27 @@ for (var i = 0; i < 3; i++){
 	reactionYOffsets[i] = 12 + _yOffsetGap*i;
 	reactants[i] = array_create(7, -1);
 	products[i] = array_create(7, -1);
-	reactants[i][3] = global.elements[irandom(global.elementNumber - 1)];
-	products[i][3] = global.elements[irandom(global.elementNumber - 1)];
+	
+	//
+	var _elementCount = reactionGrabBagElementCount[reactionGrabBagIndex];
+	var _reactionShapes = global.REACTION_SHAPES[_elementCount];
+	reactionType[i] = _reactionShapes[irandom(array_length(_reactionShapes) - 1)];
+	var _reactionTemplates = global.REACTION_TEMPLATES[reactionType[i]];
+	var _reactionTemplateNumber = array_length(_reactionTemplates);
+	var _reactionTemplateA = _reactionTemplates[irandom(_reactionTemplateNumber - 1)];
+	var _reactionTemplateB = _reactionTemplates[irandom(_reactionTemplateNumber - 1)];
+	var _reactionTemplateBStartIndex = _reactionTemplateA[3] + 1;
+	var _reactionElements = array_shuffle(global.elements);
+	for (var _cell = 0; _cell < 7; _cell++){
+		if _reactionTemplateA[_cell] == -1{
+			continue;
+		}
+		
+		reactants[i][_cell] = _reactionElements[_reactionTemplateA[_cell] % global.elementNumber];
+		products[i][_cell] = _reactionElements[(_reactionTemplateB[_cell] + _reactionTemplateBStartIndex) % global.elementNumber];
+	}
+	
+	reactionGrabBagIndex++;
 }
 
 reactionXPos = array_create(7);
@@ -105,10 +132,3 @@ reactionXPos[5] = _xPos;
 reactionYPos[5] = 6;
 reactionXPos[6] = _xPos;
 reactionYPos[6] = 6 + 12;
-
-// Reaction types
-// 7 of 1
-// 3.5 of 2
-// 2.33 of 3
-// 1.75 of 4
-// 1 of 7
