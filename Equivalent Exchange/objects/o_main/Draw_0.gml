@@ -1,14 +1,43 @@
 /// @description
 for (var _cell = 0; _cell < sqr(11); _cell++){
-	if is_undefined(hexes[_cell]){
+	var _element = hexes[_cell];
+	if _element == -1{
 		continue;
 	}
 		
-	draw_sprite(s_fire, 0, hexesXPos[_cell], hexesYPos[_cell]);
+	draw_sprite(hexes[_cell], 0, hexesXPos[_cell], hexesYPos[_cell]);
 }
 
-var _inst = instance_position(mouse_x, mouse_y, o_mask);
+if hoveredCell != -1{
+	var _frame = (global.currentFrame / 2) % 30;
+	for (var _index = 0; _index < 7; _index++){
+		var _cell = hoveredCells[_index];
+		if _cell == -1{
+			continue;
+		}
+		
+		if _frame < sprite_get_number(s_shine){
+			draw_sprite(s_shine, _frame, hexesXPos[_cell], hexesYPos[_cell]);
+		}
+		draw_sprite(s_circle, 0, hexesXPos[_cell], hexesYPos[_cell]);
+	}
+}
 
-if _inst != noone{
-	draw_sprite(s_collisionMask, 0, hexesXPos[_inst.cell], hexesYPos[_inst.cell]);
+if selectedReaction != -1{
+	draw_sprite(s_selector, selectedReaction, 0, 0);
+}
+
+for (var i = 0; i < 3; i++){
+	var _yPos = reactionYOffsets[i];
+	for (var _cell = 0; _cell < 7; _cell++){
+		var _sprite = reactants[i][_cell];
+		if _sprite != -1{
+			draw_sprite(_sprite, 0, reactantsXOffset + reactionXPos[_cell], _yPos + reactionYPos[_cell]);
+		}
+		
+		var _sprite = products[i][_cell];
+		if _sprite != -1{
+			draw_sprite(_sprite, 0, productsXOffset + reactionXPos[_cell], _yPos + reactionYPos[_cell]);
+		}
+	}
 }

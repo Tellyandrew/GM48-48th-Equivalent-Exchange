@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"s_scratch",
   "bboxMode":0,
-  "bbox_bottom":67,
+  "bbox_bottom":70,
   "bbox_left":0,
   "bbox_right":148,
   "bbox_top":0,
@@ -19,7 +19,7 @@
   "height":270,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"28f29eb5-3cea-4a2a-9714-2e192dfb9afc","blendMode":0,"displayName":"default","isLocked":false,"name":"28f29eb5-3cea-4a2a-9714-2e192dfb9afc","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"fdd7eb32-2469-489b-a7b0-6a3df4689dfe","blendMode":0,"displayName":"default","isLocked":false,"name":"fdd7eb32-2469-489b-a7b0-6a3df4689dfe","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"s_scratch",
   "nineSlice":null,
