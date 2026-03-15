@@ -100,15 +100,16 @@ function reaction_grab_bag_shuffle(){
 			grabBagModulator[i]--;
 		}
 	}
-	//for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
-	//	grabBagModulator[i] += 7/global.ELEMENT_COUNT_INT[i];
-	//}
+	for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
+		grabBagModulator[i] += 7/global.ELEMENT_COUNT_INT[i];
+	}
 	array_shuffle_ext(reactionGrabBagElementCount);
 
 	reactionGrabBagIndex = 0;
 }
 
 function scan_for_matches(){
+	var _aMatch = false;
 	matches = array_create(sqr(11), 0);
 	for (var i = 0; i < 3; i++){
 		var _reactant = reactants[i];
@@ -172,6 +173,7 @@ function scan_for_matches(){
 				}
 			}
 			
+			_aMatch = true;
 			if _reactant[0] != -1{
 				matches[_upLeftCell] |= _mask;
 			}
@@ -192,6 +194,10 @@ function scan_for_matches(){
 				matches[_downRightCell] |= _mask;
 			}
 		}
+	}
+	if not _aMatch{
+		playerLost = true;
+		audio_play_sound(u_pray, 500, false, 0.25);
 	}
 }
 

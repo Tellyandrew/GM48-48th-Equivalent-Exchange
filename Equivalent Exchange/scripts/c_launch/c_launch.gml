@@ -1,5 +1,11 @@
-var _font = font_add_sprite_ext(s_font, " ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'/", true, 1);
+var _font = font_add_sprite_ext(s_font, " ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'/`", true, 1);
 draw_set_font(_font);
+
+global.tutorial = true;
+global.tutorialIndex = 0;
+
+global.highest = -1;
+global.lowest = 9999999;
 
 global.elements = [s_water, s_fire, s_earth, s_air, s_aether];
 global.elementNumber = array_length(global.elements);

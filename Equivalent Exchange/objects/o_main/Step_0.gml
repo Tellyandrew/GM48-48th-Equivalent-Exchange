@@ -5,9 +5,18 @@ if not audio_is_playing(u_music){
 	audio_play_sound(u_music, 1000, true, 0.25);
 }
 
-if keyboard_check_pressed(vk_f5){
+if keyboard_check_pressed(vk_space){
+	global.tutorial = false;
 	instance_destroy();
 	instance_create_depth(0, 0, 0, o_main);
+}
+
+if playerWon{
+	exit;
+}
+
+if playerLost{
+	exit;
 }
 
 shineFrame++;
@@ -168,7 +177,7 @@ if selectedReaction != -1{
 		}
 	}
 	
-	if mouse_check_button_pressed(mb_left){
+	if mouse_check_button_pressed(mb_left) or mouse_check_button_released(mb_left){
 		if _acceptable{
 			audio_play_sound(u_snare, 500, false, 0.25);
 		
@@ -177,20 +186,74 @@ if selectedReaction != -1{
 				if _shouldChange[_cell]{
 					var _hoveredCell = hoveredCells[_cell];
 					var _productElement = _product[_cell];
+					if _productElement = s_shard{
+						fragmentTotal++;
+					}
+					if _productElement = s_stone{
+						playerWon = true;
+					}
 					hexes[_hoveredCell] = _productElement;
 				}
 			}
 			reactionTotal++;
 			fragmentsPrimed[selectedReaction] = 1;
+			if playerWon{
+				global.highest = max(reactionTotal, global.highest);
+				global.lowest = min(reactionTotal, global.lowest);
+				audio_play_sound(u_pray, 500, false, 0.25);
+			}
 			
 			/// New reaction
-			{
-				reaction_update(selectedReaction);
+			if fragmentsPrimed[0] + fragmentsPrimed[1] + fragmentsPrimed[2] == 3{
+				if fragmentIndex >= array_length(fragmentShapes){
+					reactants[selectedReaction] = array_create(7, s_shard);
+					products[selectedReaction] = array_create(7, s_stoneHelper);
+					products[selectedReaction][3] = s_stone;
+					reactionType[selectedReaction] = REACTION_TYPE.SEVEN;
+				}else{
+					reactionType[selectedReaction] = fragmentShapes[fragmentIndex];
+					var _reactionTemplate = global.REACTION_TEMPLATES[reactionType[selectedReaction]][0];
+					reactants[selectedReaction] = array_create(7, -1);
+					products[selectedReaction] = array_create(7, -1);
+					for (var _cell = 0; _cell < 7; _cell++){
+						if _reactionTemplate[_cell] == -1{
+							continue;
+						}
+					
+						reactants[selectedReaction][_cell] = s_aether;
+						products[selectedReaction][_cell] = s_shard;
+					}
+				}
+				
+				fragmentsPrimed = array_create(3, 0);
+				fragmentIndex++;
+			}else{
+				if global.tutorial{
+					switch(global.tutorialIndex){
+						case 0:
+							reactionType[selectedReaction] = REACTION_TYPE.FOUR_T_NORTH;
+							reactants[selectedReaction] = [-1, s_earth, s_earth, s_earth, -1, -1, s_earth];
+							products[selectedReaction] = [-1, s_fire, s_fire, s_fire, -1, -1, s_fire];
+							break;
+						case 1:
+							reactionType[selectedReaction] = REACTION_TYPE.FOUR_T_SOUTH;
+							reactants[selectedReaction] = [s_earth, -1, -1, s_earth, s_earth, s_earth, -1];
+							products[selectedReaction] = [s_fire, -1, -1, s_fire, s_fire, s_fire, -1];
+							break;
+						default:
+							reactionType[selectedReaction] = REACTION_TYPE.SEVEN;
+							reactants[selectedReaction] = [s_water, s_water, s_water, s_water, s_water, s_water, s_water];
+							products[selectedReaction] = [s_air, s_aether, s_aether, s_aether, s_air, s_air, s_aether];
+					}
+				}else{
+					reaction_update(selectedReaction);
 			
-				if reactionGrabBagIndex == array_length(reactionGrabBagElementCount){
-					reaction_grab_bag_shuffle();
+					if reactionGrabBagIndex == array_length(reactionGrabBagElementCount){
+						reaction_grab_bag_shuffle();
+					}
 				}
 			}
+			global.tutorialIndex++;
 			
 			scan_for_matches();
 			selectedReaction = -1;
