@@ -5,11 +5,33 @@ global.currentFrame = -1;
 
 hoveredCell = -1;
 
+hoveredReaction = -1;
 selectedReaction = -1;
 
+hoveredCells = array_create(7);
+acceptableCells = array_create(7, false);
 
+///
+reactionGrabBagElementCount = array_create(0);
 
+grabBagModulator = array_create(ELEMENT_COUNT.NUMBER);
+grabBagModulator[ELEMENT_COUNT.ONE] = 7/1;
+grabBagModulator[ELEMENT_COUNT.TWO] = 7/2;
+grabBagModulator[ELEMENT_COUNT.THREE] = 7/3;
+grabBagModulator[ELEMENT_COUNT.FOUR] = 7/4;
+grabBagModulator[ELEMENT_COUNT.SEVEN] = 7/7;
 
+for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
+	while grabBagModulator[i] >= 1{
+		array_push(reactionGrabBagElementCount, i);
+		grabBagModulator[i]--;
+	}
+}
+for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
+	grabBagModulator[i] += 7/global.ELEMENT_COUNT_INT[i];
+}
+
+reactionGrabBagIndex = 0;
 
 ///
 hexesXOffset = 42;
@@ -40,7 +62,7 @@ for (var i = 0; i < 11; i++){
 		var _cell = i + j*11;
 		hexesXPos[_cell] = _xPos;
 		hexesYPos[_cell] = _yPos;
-		hexes[_cell] = s_water;//global.elements[irandom(global.elementNumber - 1)];
+		hexes[_cell] = global.elements[irandom(global.elementNumber - 1)];
 	}
 }
 
@@ -53,16 +75,14 @@ var _yOffsetGap = 42;
 reactionYOffsets = array_create(3);
 reactants = array_create(3);
 products = array_create(3);
+reactionType = array_create(3, REACTION_TYPE.ONE);
 
 for (var i = 0; i < 3; i++){
 	reactionYOffsets[i] = 12 + _yOffsetGap*i;
 	reactants[i] = array_create(7, -1);
 	products[i] = array_create(7, -1);
-	for (var _cell = 0; _cell < 7; _cell++){
-		
-		reactants[i][_cell] = global.elements[i];
-		products[i][_cell] = global.elements[i + 2];
-	}
+	reactants[i][3] = global.elements[irandom(global.elementNumber - 1)];
+	products[i][3] = global.elements[irandom(global.elementNumber - 1)];
 }
 
 reactionXPos = array_create(7);
@@ -86,4 +106,9 @@ reactionYPos[5] = 6;
 reactionXPos[6] = _xPos;
 reactionYPos[6] = 6 + 12;
 
-hoveredCells = array_create(7);
+// Reaction types
+// 7 of 1
+// 3.5 of 2
+// 2.33 of 3
+// 1.75 of 4
+// 1 of 7
