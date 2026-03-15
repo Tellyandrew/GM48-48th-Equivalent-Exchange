@@ -1,4 +1,38 @@
 function reaction_update(_index){
+	var _tryAgain;
+	do{
+		_tryAgain = false;
+		var _elementCount = reactionGrabBagElementCount[reactionGrabBagIndex];
+		var _reactionShapes = global.REACTION_SHAPES[_elementCount];
+		reactionType[_index] = _reactionShapes[irandom(array_length(_reactionShapes) - 1)];
+		var _reactionTemplates = global.REACTION_TEMPLATES[reactionType[_index]];
+		var _reactionTemplateNumber = array_length(_reactionTemplates);
+		var _reactionTemplateA = _reactionTemplates[irandom(_reactionTemplateNumber - 1)];
+		var _reactionTemplateB = _reactionTemplates[irandom(_reactionTemplateNumber - 1)];
+		var _reactionTemplateBStartIndex = _reactionTemplateA[3] + 1;
+		var _reactionElements = array_shuffle(global.elements);
+		reactants[_index] = array_create(7, -1);
+		products[_index] = array_create(7, -1);
+		for (var _cell = 0; _cell < 7; _cell++){
+			if _reactionTemplateA[_cell] == -1{
+				continue;
+			}
+			
+			var _element = _reactionElements[_reactionTemplateA[_cell] % global.elementNumber];
+			if _element == s_aether{
+				_tryAgain = true;
+				break;
+			}
+		
+			reactants[_index][_cell] = _element;
+			products[_index][_cell] = _reactionElements[(_reactionTemplateB[_cell] + _reactionTemplateBStartIndex) % global.elementNumber];
+		}
+	}until not _tryAgain;
+	
+	reactionGrabBagIndex++;
+}
+
+function reaction_update_alt2(_index){
 	reactants[_index] = array_create(7, -1);
 	products[_index] = array_create(7, -1);
 	
@@ -59,16 +93,16 @@ function reaction_update_alt(_index){
 
 function reaction_grab_bag_shuffle(){
 	reactionGrabBagElementCount = array_create(0);
-
+	
 	for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
 		while grabBagModulator[i] >= 1{
 			array_push(reactionGrabBagElementCount, i);
 			grabBagModulator[i]--;
 		}
 	}
-	for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
-		grabBagModulator[i] += 7/global.ELEMENT_COUNT_INT[i];
-	}
+	//for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
+	//	grabBagModulator[i] += 7/global.ELEMENT_COUNT_INT[i];
+	//}
 	array_shuffle_ext(reactionGrabBagElementCount);
 
 	reactionGrabBagIndex = 0;

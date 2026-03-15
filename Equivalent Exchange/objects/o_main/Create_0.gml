@@ -29,9 +29,16 @@ grabBagModulator[ELEMENT_COUNT.SEVEN] = 1;
 
 reaction_grab_bag_shuffle();
 
+fragmentsPrimed = array_create(3, 0);
+
 ///
 hexesXOffset = 42;
 hexesYOffset = 2;
+text1XOffset = 41;
+text2XOffset = 155;
+
+reactionTotal = 0;
+fragmentTotal = 1;
 
 hexes = array_create(sqr(11), -1);
 matches = array_create(sqr(11), 0b0);

@@ -65,4 +65,16 @@ for (var i = 0; i < 3; i++){
 			draw_sprite(_sprite, 0, productsXOffset + reactionXPos[_cell], _yPos + reactionYPos[_cell]);
 		}
 	}
+	
+	var _xPos = 157;
+	_yPos -= 3;
+	draw_sprite(s_ticker, fragmentsPrimed[i], _xPos, _yPos);
 }
+
+draw_set_halign(fa_left);
+draw_text_colour(text1XOffset, hexesYOffset, "FRAGMENTS", #FFDC91, #FFDC91, #FFDC91, #FFDC91, 1);
+draw_text_colour(text1XOffset, hexesYOffset + 6, (fragmentTotal < 10 ? "0" : "") + string(fragmentTotal) + "/XX", #FFDC91, #FFDC91, #FFDC91, #FFDC91, 1);
+
+draw_set_halign(fa_right);
+draw_text_colour(text2XOffset, hexesYOffset, "REACTIONS", #FFDC91, #FFDC91, #FFDC91, #FFDC91, 1);
+draw_text_colour(text2XOffset, hexesYOffset + 6, string(reactionTotal), #FFDC91, #FFDC91, #FFDC91, #FFDC91, 1);
