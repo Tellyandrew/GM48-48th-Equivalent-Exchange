@@ -26,7 +26,7 @@ enum ELEMENT_COUNT{
 	FOUR,
 	SEVEN,
 	
-	NUMBER
+	NUMBER,
 }
 
 global.ELEMENT_COUNT_INT = array_create(ELEMENT_COUNT.NUMBER);
@@ -43,6 +43,9 @@ global.REACTION_SHAPES[ELEMENT_COUNT.THREE] = [REACTION_TYPE.THREE_EAST, REACTIO
 global.REACTION_SHAPES[ELEMENT_COUNT.FOUR] = [REACTION_TYPE.FOUR_GLOB_NORTH, REACTION_TYPE.FOUR_GLOB_EAST, REACTION_TYPE.FOUR_GLOB_WEST, REACTION_TYPE.FOUR_T_NORTH, REACTION_TYPE.FOUR_T_SOUTH];
 global.REACTION_SHAPES[ELEMENT_COUNT.SEVEN] = [REACTION_TYPE.SEVEN];
 
+global.REACTION_SELECTION_OFFSETS_X = [0,  0, 3*sqrt(3), -3*sqrt(3), 4*sqrt(3), -4*sqrt(3),  0, 3*sqrt(3), -3*sqrt(3), 0, 0, 0];
+global.REACTION_SELECTION_OFFSETS_Y = [0, -6, 3________,  3________, 0________,  0________, -6, 3________,  3________, 0, 0, 0];
+
 global.REACTION_TEMPLATES = array_create(REACTION_TYPE.NUMBER);
 global.REACTION_TEMPLATES[REACTION_TYPE.ONE] = [[-1, -1, -1, 0, -1, -1, -1]];
 global.REACTION_TEMPLATES[REACTION_TYPE.TWO_NORTH] = [[-1, -1, 0, 0, -1, -1, -1], [-1, -1, 0, 1, -1, -1, -1]];
@@ -53,51 +56,51 @@ global.REACTION_TEMPLATES[REACTION_TYPE.THREE_EAST] = [
 	[-1, -1, -1, 1, -1, 0, 0],
 	[-1, -1, -1, 1, -1, 0, 1],
 	[-1, -1, -1, 1, -1, 1, 0],
-	[-1, -1, -1, 2, -1, 1, 0],
+	//[-1, -1, -1, 2, -1, 1, 0],
 ];
 global.REACTION_TEMPLATES[REACTION_TYPE.THREE_WEST] = [
 	[0, 0, -1, 0, -1, -1, -1],
 	[1, 0, -1, 1, -1, -1, -1],
 	[0, 1, -1, 1, -1, -1, -1],
 	[0, 0, -1, 1, -1, -1, -1],
-	[0, 1, -1, 2, -1, -1, -1],
+	//[0, 1, -1, 2, -1, -1, -1],
 ];
 global.REACTION_TEMPLATES[REACTION_TYPE.FOUR_GLOB_NORTH] = [
 	[0, -1, 0, 0, -1, 0, -1],
 	[0, -1, 0, 1, -1, 1, -1],
 	[1, -1, 0, 1, -1, 0, -1],
 	[0, -1, 1, 1, -1, 0, -1],
-	[3, -1, 1, 0, -1, 2, -1],
+	//[0, -1, 1, 3, -1, 2, -1],
 ];
 global.REACTION_TEMPLATES[REACTION_TYPE.FOUR_GLOB_EAST] = [
 	[-1, -1, -1, 0, 0, 0, 0],
 	[-1, -1, -1, 1, 1, 0, 0],
 	[-1, -1, -1, 1, 0, 1, 0],
 	[-1, -1, -1, 1, 0, 0, 1],
-	[-1, -1, -1, 3, 2, 1, 0],
+	//[-1, -1, -1, 3, 2, 1, 0],
 ];
 global.REACTION_TEMPLATES[REACTION_TYPE.FOUR_GLOB_WEST] = [
 	[0, 0, -1, 0, 0, -1, -1],
 	[1, 0, -1, 1, 0, -1, -1],
 	[0, 1, -1, 1, 0, -1, -1],
 	[0, 0, -1, 1, 1, -1, -1],
-	[0, 1, -1, 2, 3, -1, -1],
+	//[0, 1, -1, 2, 3, -1, -1],
 ];
 global.REACTION_TEMPLATES[REACTION_TYPE.FOUR_T_NORTH] = [
 	[-1, 0, 0, 0, -1, -1, 0],
 	[-1, 0, 0, 1, -1, -1, 0],
-	[-1, 1, 2, 3, -1, -1, 0],
+	//[-1, 1, 2, 3, -1, -1, 0],
 ];
 global.REACTION_TEMPLATES[REACTION_TYPE.FOUR_T_SOUTH] = [
 	[0, -1, -1, 0, 0, 0, -1],
 	[0, -1, -1, 1, 0, 0, -1],
-	[0, -1, -1, 3, 2, 1, -1],
+	//[0, -1, -1, 3, 2, 1, -1],
 ];
 global.REACTION_TEMPLATES[REACTION_TYPE.SEVEN] = [
 	[0, 0, 0, 0, 0, 0, 0],
 	[0, 1, 1, 1, 0, 0, 1],
 	[1, 0, 0, 1, 1, 1, 0],
 	[0, 0, 0, 1, 0, 0, 0],
-	[1, 0, 0, 2, 1, 1, 0],
-	[1, 2, 0, 3, 0, 2, 1],
+	//[1, 0, 0, 2, 1, 1, 0],
+	//[1, 2, 0, 3, 0, 2, 1],
 ];

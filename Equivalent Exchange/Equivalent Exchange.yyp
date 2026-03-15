@@ -22,6 +22,7 @@
     {"id":{"name":"o_main","path":"objects/o_main/o_main.yy",},},
     {"id":{"name":"o_mask","path":"objects/o_mask/o_mask.yy",},},
     {"id":{"name":"r_main","path":"rooms/r_main/r_main.yy",},},
+    {"id":{"name":"c_functions","path":"scripts/c_functions/c_functions.yy",},},
     {"id":{"name":"c_launch","path":"scripts/c_launch/c_launch.yy",},},
     {"id":{"name":"s_aether","path":"sprites/s_aether/s_aether.yy",},},
     {"id":{"name":"s_air","path":"sprites/s_air/s_air.yy",},},

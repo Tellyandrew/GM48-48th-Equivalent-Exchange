@@ -9,7 +9,6 @@ for (var _cell = 0; _cell < sqr(11); _cell++){
 }
 
 if hoveredCell != -1 and selectedReaction != -1{
-	var _frame = (global.currentFrame / 2) % 30;
 	for (var _index = 0; _index < 7; _index++){
 		var _cell = hoveredCells[_index];
 		if _cell == -1{
@@ -19,13 +18,26 @@ if hoveredCell != -1 and selectedReaction != -1{
 		if not acceptableCells[_index]{
 			draw_sprite(s_cant, 0, hexesXPos[_cell], hexesYPos[_cell]);
 		}
-		
-		if _frame < sprite_get_number(s_shine){
-		//	draw_sprite(s_shine, _frame, hexesXPos[_cell], hexesYPos[_cell]);
-		}
 	}
 	
 	draw_sprite(s_selectionator, reactionType[selectedReaction], hexesXPos[hoveredCell], hexesYPos[hoveredCell]);
+}
+
+var _frame = (shineFrame / 2) % 45;
+if _frame < sprite_get_number(s_shine){
+	var _mask = 0b0;
+	if selectedReaction != -1{
+		_mask |= 0b1 << selectedReaction;
+	}
+	if hoveredReaction != -1{
+		_mask |= 0b1 << hoveredReaction;
+	}
+	for (var _cell = 0; _cell < sqr(11); _cell++){
+		if matches[_cell] & _mask{
+			var _colour = hexes[_cell] == s_aether ? #F3C3D8 : c_white;
+			draw_sprite_ext(s_shine, _frame, hexesXPos[_cell], hexesYPos[_cell], 1, 1, 0, _colour, 1);
+		}
+	}
 }
 
 draw_sprite(s_hud, 0, 0, 0);

@@ -1,6 +1,6 @@
 /// @description
 
-global.currentFrame = -1;
+shineFrame = -1;
 
 
 hoveredCell = -1;
@@ -19,7 +19,6 @@ acceptableCells = array_create(7, false);
 // 2.33 of 3
 // 1.75 of 4
 // 1 of 7
-reactionGrabBagElementCount = array_create(0);
 
 grabBagModulator = array_create(ELEMENT_COUNT.NUMBER);
 grabBagModulator[ELEMENT_COUNT.ONE] = 7;
@@ -28,26 +27,24 @@ grabBagModulator[ELEMENT_COUNT.THREE] = 3;
 grabBagModulator[ELEMENT_COUNT.FOUR] = 1;
 grabBagModulator[ELEMENT_COUNT.SEVEN] = 1;
 
-for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
-	while grabBagModulator[i] >= 1{
-		array_push(reactionGrabBagElementCount, i);
-		grabBagModulator[i]--;
-	}
-}
-for (var i = ELEMENT_COUNT.ONE; i < ELEMENT_COUNT.NUMBER; i++){
-	grabBagModulator[i] += 7/global.ELEMENT_COUNT_INT[i];
-}
-array_shuffle_ext(reactionGrabBagElementCount);
-
-reactionGrabBagIndex = 0;
+reaction_grab_bag_shuffle();
 
 ///
 hexesXOffset = 42;
 hexesYOffset = 2;
 
 hexes = array_create(sqr(11), -1);
+matches = array_create(sqr(11), 0b0);
 hexesXPos = array_create(sqr(11));
 hexesYPos = array_create(sqr(11));
+
+//I don't feel like figuring out if there's statistical bias towards one side of the board, so lazy method it is
+var _elementSlots = array_create(90);
+for (var i = 0; i < 90; i++){
+	_elementSlots[i] = global.elements[floor(i/(90/global.elementNumber))];
+}
+array_shuffle_ext(_elementSlots);
+var _elementSlotIndex = 0;
 
 for (var i = 0; i < 11; i++){
 	for (var j = 0; j < 11; j++){
@@ -70,7 +67,10 @@ for (var i = 0; i < 11; i++){
 		var _cell = i + j*11;
 		hexesXPos[_cell] = _xPos;
 		hexesYPos[_cell] = _yPos;
-		hexes[_cell] = global.elements[irandom(global.elementNumber - 1)];
+		if _cell != 5 + 5*11{
+			hexes[_cell] = _elementSlots[_elementSlotIndex];
+			_elementSlotIndex++;
+		}
 	}
 }
 
@@ -87,29 +87,9 @@ reactionType = array_create(3, REACTION_TYPE.ONE);
 
 for (var i = 0; i < 3; i++){
 	reactionYOffsets[i] = 12 + _yOffsetGap*i;
-	reactants[i] = array_create(7, -1);
-	products[i] = array_create(7, -1);
 	
 	//
-	var _elementCount = reactionGrabBagElementCount[reactionGrabBagIndex];
-	var _reactionShapes = global.REACTION_SHAPES[_elementCount];
-	reactionType[i] = _reactionShapes[irandom(array_length(_reactionShapes) - 1)];
-	var _reactionTemplates = global.REACTION_TEMPLATES[reactionType[i]];
-	var _reactionTemplateNumber = array_length(_reactionTemplates);
-	var _reactionTemplateA = _reactionTemplates[irandom(_reactionTemplateNumber - 1)];
-	var _reactionTemplateB = _reactionTemplates[irandom(_reactionTemplateNumber - 1)];
-	var _reactionTemplateBStartIndex = _reactionTemplateA[3] + 1;
-	var _reactionElements = array_shuffle(global.elements);
-	for (var _cell = 0; _cell < 7; _cell++){
-		if _reactionTemplateA[_cell] == -1{
-			continue;
-		}
-		
-		reactants[i][_cell] = _reactionElements[_reactionTemplateA[_cell] % global.elementNumber];
-		products[i][_cell] = _reactionElements[(_reactionTemplateB[_cell] + _reactionTemplateBStartIndex) % global.elementNumber];
-	}
-	
-	reactionGrabBagIndex++;
+	reaction_update(i);
 }
 
 reactionXPos = array_create(7);
@@ -132,3 +112,5 @@ reactionXPos[5] = _xPos;
 reactionYPos[5] = 6;
 reactionXPos[6] = _xPos;
 reactionYPos[6] = 6 + 12;
+
+scan_for_matches();
